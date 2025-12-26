@@ -113,4 +113,5 @@ Ensure the simulation is running before starting teleoperation.
 ---
 
 ## 📸 Demo
+https://github.com/user-attachments/assets/abd3e289-31df-41c1-b88b-9eee5f46737d
 
