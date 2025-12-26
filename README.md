@@ -37,27 +37,44 @@ source install/setup.bash
 
 ## ▶️ Running the Simulation
 
-### 1️⃣ Launch Robot with Navigation & Localization (Nav2 + AMCL)
+The project supports **two operating modes** using a **single unified launch file**, controlled via launch arguments.
 
-Use this launch file to start the robot with **Nav2** and **AMCL (particle filter–based localization)**:
+### 🔹 Navigation Mode (Pre-built Map + AMCL)
+
+This mode uses a **pre-existing occupancy grid map** and performs **particle filter–based localization (AMCL)** with the **Nav2** stack enabled.
 
 ```bash
-ros2 launch bumperbot_bringup simulated_robot.launch.py
+ros2 launch bumperbot_bringup simulated_robot.launch.py world_name:=small_house
 ```
 
-This mode assumes a **pre-built map** and enables navigation using the Nav2 stack.
+**Use this mode when:**
+
+* A map of the environment already exists
+* You want to test localization and autonomous navigation
+* Global and local planners from Nav2 are required
 
 ---
 
-### 2️⃣ Launch Robot for Mapping (SLAM Toolbox)
+### 🔹 SLAM Mode (Online Mapping with slam_toolbox)
 
-Use the following command to perform **online SLAM** and build the occupancy grid map using **slam_toolbox**:
+This mode enables **online SLAM** to build the occupancy grid map in an **unknown environment** using **slam_toolbox**. Localization and mapping run simultaneously.
 
 ```bash
-ros2 launch bumperbot_mapping slam.launch.py
+ros2 launch bumperbot_bringup simulated_robot.launch.py use_slam:=true world_name:=small_house
 ```
 
-This mode is intended for **map creation** and exploration in unknown environments.
+**What this does internally:**
+
+* Launches the robot in Gazebo
+* Starts **slam_toolbox** in online mode
+* Continuously updates the occupancy grid
+* Publishes the map for visualization in RViz
+
+**Use this mode when:**
+
+* No prior map is available
+* You want to generate a map from scratch
+* Exploring new or modified environments
 
 ---
 
@@ -69,19 +86,19 @@ To manually drive the robot using the keyboard:
 ros2 run key_teleop key_teleop
 ```
 
-Make sure the simulation is already running before starting teleoperation.
+Ensure the simulation is running before starting teleoperation.
 
 ---
 
 ## 🧠 Concepts Demonstrated
 
 * Robot description using URDF
-* ROS 2 launch system
+* ROS 2 launch system with runtime arguments
 * Gazebo–ROS 2 integration
-* Controller setup with `ros2_control`
-* SLAM using **slam_toolbox**
+* Controller setup using `ros2_control`
+* Online SLAM using **slam_toolbox**
 * Particle filter–based localization (AMCL)
-* Navigation-ready architecture using Nav2
+* Autonomous navigation using the **Nav2** stack
 
 ---
 
@@ -89,14 +106,11 @@ Make sure the simulation is already running before starting teleoperation.
 
 * Multi-floor and dynamic environment support
 * Comparison of different SLAM backends
-* Advanced local planners and costmap tuning
+* Advanced local planner and costmap tuning
 * Integration with **Isaac Sim** for high-fidelity simulation
-* Custom global / local planner research
+* Research on custom global and local planners
 
 ---
 
 ## 📸 Demo
 
-
-
----
